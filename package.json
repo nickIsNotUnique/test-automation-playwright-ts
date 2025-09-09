@@ -1,0 +1,16 @@
+{
+  "name": "test-automation-playwright-ts",
+  "version": "1.0.0",
+  "repository": "git@github.com:nickisnotunique/test-automation-playwright-ts.git",
+  "author": "Daria Domina <nickisnotunique@gmail.com>",
+  "devDependencies": {
+    "@playwright/test": "~1.55.0",
+    "@types/node": "~22",
+    "typescript": "~5.9.2"
+  },
+  "engines": {
+    "node": "~22.19.0",
+    "yarn": "~1.22.22"
+  },
+  "scripts": {}
+}
