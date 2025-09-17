@@ -35,3 +35,11 @@ jobs:
           name: simple-suite-results-${{ github.run_id }}
           path: playwright-report/
           retention-days: 7
+
+      - name: Post to Slack
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"Simple suite results are ready"}' \
+          $SLACK_WEBHOOK_URL
