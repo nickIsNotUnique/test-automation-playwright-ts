@@ -1,0 +1,37 @@
+name: Auto run simple suite
+
+on:
+  pull_request: 
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run-simple-suite:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Install Playwright browsers
+        run: yarn playwright install chromium
+
+      - name: Run simple suite
+        run: yarn playwright test --project=chromium --grep @smoke
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: simple-suite-results-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 7
