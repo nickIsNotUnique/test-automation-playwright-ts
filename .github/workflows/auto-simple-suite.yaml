@@ -36,6 +36,11 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  post-slack-notification:
+    runs-on: ubuntu-latest
+    needs: run-simple-suite 
+    if: success()
+    steps:
       - name: Post to Slack
         env: 
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
