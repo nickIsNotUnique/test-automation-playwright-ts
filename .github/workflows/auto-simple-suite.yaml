@@ -36,7 +36,31 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  post-slack-notification:
+  post-slack-notification-started:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to Slack
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"Simple suite pipeline started"}' \
+          $SLACK_WEBHOOK_URL
+
+  post-slack-notification-failure:
+    runs-on: ubuntu-latest
+    needs: run-simple-suite 
+    if: failure()
+    steps:
+      - name: Post to Slack
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"Simple suite pipeline failed"}' \
+          $SLACK_WEBHOOK_URL
+
+  post-slack-notification-success:
     runs-on: ubuntu-latest
     needs: run-simple-suite 
     if: success()
