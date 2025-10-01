@@ -44,7 +44,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
-          --data '{"text":"Simple suite pipeline started"}' \
+          --data '{"text":"The simple suite pipeline started"}' \
           $SLACK_WEBHOOK_URL
 
   post-slack-notification-results:
@@ -57,11 +57,9 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           if [ "${{ needs.run-simple-suite.result }}" == "success" ]; then
-            MESSAGE="Simple suite results are ready"
+            MESSAGE="The simple suite pipeline succeeded"
           elif [ "${{ needs.run-simple-suite.result }}" == "failure" ]; then
-            MESSAGE="Simple suite pipeline failed"
-          elif [ "${{ needs.run-simple-suite.result }}" == "cancelled" ]; then
-            MESSAGE="Simple suite pipeline cancelled"
+            MESSAGE="The simple suite pipeline failed"
           fi
           
           curl -X POST -H 'Content-type: application/json' \
