@@ -58,10 +58,6 @@ jobs:
                 text:
                   type: "plain_text"
                   text: "🚀 Simple suite pipeline started"
-              - type: "context"
-                elements:
-                  - type: "mrkdwn"
-                    text: "📅 ${{ steps.date.outputs.date }} 🕒 ${{ steps.date.outputs.time }} UTC"
               - type: "divider"
               - type: "section"
                 text:
