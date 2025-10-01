@@ -39,15 +39,31 @@ jobs:
   post-slack-notification-started:
     runs-on: ubuntu-latest
     steps:
+      - name: Get current date and time
+        id: date
+        run: |
+          RUN_DATE=$(date -u +%Y-%m-%d)
+          RUN_TIME=$(date -u +%H:%M:%S)
+          echo "date=$RUN_DATE" >> $GITHUB_OUTPUT
+          echo "time=$RUN_TIME" >> $GITHUB_OUTPUT
+
       - name: Post a message in a channel
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "Simple suite pipeline started"
             blocks:
+              - type: "header"
+                text:
+                  type: "plain_text"
+                  text: "🚀 Simple suite pipeline started"
+              - type: "context"
+                elements:
+                  - type: "mrkdwn"
+                    text: "📅 ${{ steps.date.outputs.date }} 🕒 ${{ steps.date.outputs.time }} UTC"
+              - type: "divider"
               - type: "section"
                 text:
                   type: "mrkdwn"
-                  text: "Trigger: ${{ github.event_name }}"
+                  text: "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} | View workflow run>"
