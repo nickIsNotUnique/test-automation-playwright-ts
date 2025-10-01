@@ -36,10 +36,18 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-      - name: Post to Slack
-        env: 
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data '{"text":"Simple suite results are ready"}' \
-          $SLACK_WEBHOOK_URL
+  post-slack-notification-started:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post a message in a channel
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "Simple suite pipeline started"
+            blocks:
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: "Trigger: ${{ github.event_name }}"
