@@ -39,7 +39,7 @@ jobs:
   post-slack-notification-started:
     runs-on: ubuntu-latest
     steps:
-      - name: Post to Slack
+      - name: Post a start message in a Slack channel
         env: 
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
@@ -52,7 +52,7 @@ jobs:
     needs: run-simple-suite 
     if: always()
     steps:
-      - name: Post to Slack
+      - name: Post a result message in a Slack channel
         env: 
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
