@@ -1,11 +1,6 @@
 # test-automation-playwright-ts
 
-<<<<<<< HEAD
 [![Playwright Tests](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml/badge.svg)](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml) ![Status](https://img.shields.io/badge/educational-project-green)
-=======
-[![Playwright Tests](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml/badge.svg)](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml)
-![Status](https://img.shields.io/badge/status-draft-lightgrey)
->>>>>>> main
 
 This repository serves as a **practical demonstration** of implementing Playwright test automation with GitHub Actions CI/CD. Created as companion code for my article series [ "Playwright testing with GitHub Actions"](https://nickisnotunique.substack.com/profile/posts). This project provides patterns, recommended configuration, and examples for end-to-end web testing with Playwright test runner, TypeScript, and modern CI practices.
 
