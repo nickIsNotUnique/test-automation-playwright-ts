@@ -76,17 +76,16 @@ This repository demonstrates a pragmatic setup for automated UI tests using Play
 
 This section describes the project layout
 
-- .github/workflows/    — CI workflows
-- node_modules/
-- playwright-report/
-- test-results/
-- tests/                — Test files (e.g., *.spec.ts)
-- .gitignore
-- package.json
-- playwright.config.ts  — Playwright test runner configuration
-- README.md
-- tsconfig.json
-- yarn.lock
+```
+├── .github/workflows/ # CI/CD workflows
+├── tests/ # Test files (*.spec.ts)
+├── .gitignore
+├── package.json
+├── playwright.config.ts
+├── README.md
+├── tsconfig.json
+└── yarn.lock
+```
 
 ---
 
