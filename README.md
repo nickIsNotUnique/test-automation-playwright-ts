@@ -9,18 +9,17 @@ A starter/test automation repository using Playwright with TypeScript. This proj
 This repository demonstrates a pragmatic setup for automated UI tests using Playwright and TypeScript. It is intended as a foundation you can adapt to your own product tests. Key goals:
 - Fast, reliable E2E tests using Playwright Test
 - TypeScript-first developer experience
-- Clear structure for tests, fixtures, and page objects
 - Recommended CI integration and reproducible local runs
-- Support for traces, videos, and HTML reports for debugging failures
+- Support for traces, and HTML reports for debugging failures
 
 ---
 
 ## Prerequisites
 
-- Node.js (up to v 22.20)
-- TypeScript (up to 4.9.5)
-- yarn (1.22.22)
-- Playwright (>= 1.48.1)
+- Node.js (~22.20.0)
+- TypeScript (~5.9.2)
+- yarn (~1.22.22)
+- Playwright (~1.55.0)
 
 ---
 
@@ -59,12 +58,15 @@ This repository demonstrates a pragmatic setup for automated UI tests using Play
   ```bash
   yarn playwright test --debug
   ```
-
+- View test report:
+  ```bash
+  yarn playwright show-report
+  ```
 ---
 
 ## Project structure
 
-This section describes a used layout
+This section describes the project layout
 
 - .github/workflows/    — CI workflows
 - node_modules/
@@ -115,7 +117,7 @@ Available pipelines:
 - Manual run via workflow_dispatch
 
 **Functions:**
-This workflow consists of **3 parallel jobs**:
+This workflow consists of **3 jobs**:
 
 #### Job 1: `run-simple-suite`
 - Checks out code
@@ -168,21 +170,6 @@ This workflow consists of **3 parallel jobs**:
 - **Platform**: Ubuntu Latest
 - **No Slack notifications**
 - Artifacts uploaded even if tests are cancelled or fail
-
----
-
-### Comparison table:
-
-| Feature | playwright.yml | auto-simple-suite.yaml | run-simple-suite.yaml |
-|---------|----------------|------------------------|----------------------|
-| **Auto-trigger** | Push/PR | PR to main | No |
-| **Manual trigger** | No | Yes | Yes |
-| **Tests** | All | @smoke only | @smoke only |
-| **Browsers** | All | Chromium | Chromium |
-| **Timeout** | 60 min | 15 min | 15 min |
-| **Artifact retention** | 30 days | 7 days | 7 days |
-| **Slack notifications** | No | Yes | No |
-| **Node.js** | LTS | v22 | v22 |
 
 ---
 
