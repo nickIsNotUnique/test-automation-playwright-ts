@@ -1,6 +1,7 @@
 # test-automation-playwright-ts
 
-[![Playwright Tests](https://img.shields.io/badge/playwright-%20test-blue)](https://playwright.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-%5E4.0-blue)](https://www.typescriptlang.org/) ![Status](https://img.shields.io/badge/status-draft-lightgrey)
+[![Playwright Tests](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml/badge.svg)](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml)
+![Status](https://img.shields.io/badge/status-draft-lightgrey)
 
 A starter/test automation repository using Playwright with TypeScript. This project provides patterns, recommended configuration, and examples for end-to-end web testing with Playwright test runner, TypeScript, and modern CI practices.
 
