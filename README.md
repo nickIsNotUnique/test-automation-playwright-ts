@@ -1,9 +1,13 @@
 # test-automation-playwright-ts
 
+<<<<<<< HEAD
+[![Playwright Tests](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml/badge.svg)](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml) ![Status](https://img.shields.io/badge/educational-project-green)
+=======
 [![Playwright Tests](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml/badge.svg)](https://github.com/nickIsNotUnique/test-automation-playwright-ts/actions/workflows/playwright.yml)
 ![Status](https://img.shields.io/badge/status-draft-lightgrey)
+>>>>>>> main
 
-A starter/test automation repository using Playwright with TypeScript. This project provides patterns, recommended configuration, and examples for end-to-end web testing with Playwright test runner, TypeScript, and modern CI practices.
+This repository serves as a **practical demonstration** of implementing Playwright test automation with GitHub Actions CI/CD. Created as companion code for my article series [ "Playwright testing with GitHub Actions"](https://nickisnotunique.substack.com/profile/posts). This project provides patterns, recommended configuration, and examples for end-to-end web testing with Playwright test runner, TypeScript, and modern CI practices.
 
 ## Overview
 
@@ -12,6 +16,14 @@ This repository demonstrates a pragmatic setup for automated UI tests using Play
 - TypeScript-first developer experience
 - Recommended CI integration and reproducible local runs
 - Support for traces, and HTML reports for debugging failures
+
+---
+
+## Key Features
+
+- **CI/CD Workflows**: Full suite, auto smoke tests, manual smoke runs
+- **Optimized Caching**: Yarn cache for faster CI runs
+- **Slack Integration**: Automated notifications for test results
 
 ---
 
@@ -89,6 +101,10 @@ This project uses GitHub Actions for continuous integration.
 Available pipelines:
 
 ### `playwright.yml` - Playwright Tests
+#### Summary:
+- Runs on every push to main/master
+- Executes complete test coverage
+- Ideal for: Release validation, nightly builds
 
 **Triggers:**
 - Push to `main` or `master` branches
@@ -112,6 +128,11 @@ Available pipelines:
 ---
 
 ### `auto-simple-suite.yaml` - Auto run simple suite
+#### Summary:
+- Triggers on PRs to main
+- Runs critical path tests only
+- Includes Slack notifications
+- Ideal for: PR validation, quick feedback loops
 
 **Triggers:**
 - Pull Request to `main` branch
@@ -151,6 +172,10 @@ This workflow consists of **3 jobs**:
 ---
 
 ### `run-simple-suite.yaml` - Run simple suite
+#### Summary:
+- Manually triggered via GitHub UI
+- No notifications (focused testing)
+- Ideal for: Ad-hoc testing, debugging, demos
 
 **Triggers:**
 - Manual run only via workflow_dispatch
@@ -173,6 +198,22 @@ This workflow consists of **3 jobs**:
 - Artifacts uploaded even if tests are cancelled or fail
 
 ---
+
+## Author
+
+- GitHub: [@nickIsNotUnique](https://github.com/nickIsNotUnique)
+- Articles: [Substack](https://nickisnotunique.substack.com/profile/posts)
+
+This project is part of my article series "Playwright testing with GitHub Actions".
+
+---
+
+## Feedback & Contributions
+
+Questions or suggestions? Feel free to:
+- [Open an issue](https://github.com/nickIsNotUnique/test-automation-playwright-ts/issues)
+- [Start a discussion](https://github.com/nickIsNotUnique/test-automation-playwright-ts/discussions)
+- ⭐ Star this repo if you find it useful!
 
 ## Resources
 
