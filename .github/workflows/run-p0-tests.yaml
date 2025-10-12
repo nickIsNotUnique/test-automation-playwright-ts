@@ -1,0 +1,43 @@
+name: Run P0 tests
+
+on:
+  pull_request: 
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run-p0-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js and Playwright
+        uses: ./.github/actions/setup-playwright/action.yaml
+
+      - name: Run P0 tests
+        run: yarn playwright test --project=chromium --grep @p0
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-tests-results-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 7
+
+  post-slack-notification-started:
+    uses: ./.github/workflows/slack-notification.yaml
+    with:
+      job_status: started
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  post-slack-notification-results:
+    needs: run-p0-tests
+    if: always()
+    uses: ./.github/workflows/slack-notification.yaml
+    with:
+      job_status: ${{ needs.run-p0-tests.result }}
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

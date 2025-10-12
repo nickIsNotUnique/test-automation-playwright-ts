@@ -1,0 +1,35 @@
+name: Slack Notification
+
+on:
+  workflow_call:
+    inputs:
+      job_status:
+        description: 'Status: started, success, failure, cancelled, skipped'
+        required: true
+        type: string
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
+
+jobs:
+  send-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post message to Slack
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          PIPELINE_NAME="${{ github.workflow }}"
+          
+          case "${{ inputs.job_status }}" in
+            "started")  MESSAGE="🚀 $PIPELINE_NAME started" ;;
+            "success")  MESSAGE="✅ $PIPELINE_NAME succeeded" ;;
+            "failure")  MESSAGE="❌ $PIPELINE_NAME failed" ;;
+            "cancelled") MESSAGE="🚫 $PIPELINE_NAME was cancelled" ;;
+            "skipped")  MESSAGE="⏭️ $PIPELINE_NAME was skipped" ;;
+            *)          MESSAGE="⚠️ $PIPELINE_NAME - status: ${{ inputs.job_status }}" ;;
+          esac
+          
+          curl -X POST -H 'Content-type: application/json' \
+          --data "{\"text\":\"$MESSAGE\"}" \
+          $SLACK_WEBHOOK_URL
