@@ -1,0 +1,20 @@
+name: 'Setup Playwright'
+description: 'Install Node.js, dependencies and Playwright browsers'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'yarn'
+      shell: bash
+      
+    - name: Install dependencies
+      run: yarn install
+      shell: bash
+      
+    - name: Install Playwright browsers
+      run: yarn playwright install chromium
+      shell: bash

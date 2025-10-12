@@ -1,0 +1,58 @@
+name: Auto run simple suite with reusable setup
+
+on:
+  pull_request: 
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run-simple-suite:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js and Playwright
+        uses: ./.github/actions/setup-playwright/action.yaml
+
+      - name: Run simple suite
+        run: yarn playwright test --project=chromium --grep @smoke
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: simple-suite-results-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 7
+
+  post-slack-notification-started:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post a start message in a Slack channel
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"The simple suite pipeline started"}' \
+          $SLACK_WEBHOOK_URL
+
+  post-slack-notification-results:
+    runs-on: ubuntu-latest
+    needs: run-simple-suite 
+    if: always()
+    steps:
+      - name: Post a result message in a Slack channel
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ "${{ needs.run-simple-suite.result }}" == "success" ]; then
+            MESSAGE="The simple suite pipeline succeeded"
+          elif [ "${{ needs.run-simple-suite.result }}" == "failure" ]; then
+            MESSAGE="The simple suite pipeline failed"
+          fi
+          
+          curl -X POST -H 'Content-type: application/json' \
+          --data "{\"text\":\"$MESSAGE\"}" \
+          $SLACK_WEBHOOK_URL
