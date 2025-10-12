@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Node.js and Playwright
-        uses: ./.github/actions/setup-playwright/action.yaml
+        uses: ./.github/actions/setup-playwright
 
       - name: Run simple suite
         run: yarn playwright test --project=chromium --grep @smoke
