@@ -13,7 +13,18 @@ runs:
     - name: Install dependencies
       run: yarn install
       shell: bash
+    
+    - name: Cache Playwright browsers
+      id: cache-playwright
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-browsers-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          playwright-browsers-${{ runner.os }}-
+        save-always: true
       
     - name: Install Playwright browsers
-      run: yarn playwright install chromium
+      if: steps.cache-playwright.outputs.cache-hit != 'true'
+      run: yarn playwright install --with-deps
       shell: bash
