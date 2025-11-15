@@ -1,4 +1,4 @@
-name: Daily run of P0 tests
+name: Daily run of regression tests
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-daily-p0-tests:
+  run-daily-regression-tests:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     strategy:
