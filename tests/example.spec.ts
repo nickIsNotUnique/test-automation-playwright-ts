@@ -16,3 +16,9 @@ test('get started link', { tag: ['@smoke', '@regression', '@mobile'] }, async ({
   // Expects page to have a heading with the name of Installation.
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 });
+
+test('new test', { tag: ['@new'] }, async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+
+  await expect(page).toHaveTitle(/Playwright/);
+});
