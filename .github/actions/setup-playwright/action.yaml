@@ -30,5 +30,6 @@ runs:
       shell: bash
 
     - name: Ensure system dependencies are installed
+      if: steps.cache-playwright.outputs.cache-hit == 'true'
       run: yarn playwright install-deps
       shell: bash
