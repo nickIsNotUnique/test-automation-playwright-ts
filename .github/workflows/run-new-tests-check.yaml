@@ -59,7 +59,7 @@ jobs:
         if: ${{ steps.find-new-tests.outputs.has_new_tests == 'true' }}
         id: list-tests
         run: |
-          TEST_FILES=$(echo "${{ steps.find-new-tests.outputs.new_test_files }}" | tr '\n' ' ')
+          TEST_FILES=$(echo "${{ steps.find-new-tests.outputs.new_test_files }}" | xargs)
 
           if [ -z "$TEST_FILES" ]; then
             echo "No test files to process"
