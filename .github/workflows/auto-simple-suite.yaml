@@ -1,8 +1,8 @@
 name: Auto run simple suite
 
 on:
-  pull_request: 
-    branches: [ main ]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Post a start message in a Slack channel
-        env: 
+        env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
@@ -49,11 +49,11 @@ jobs:
 
   post-slack-notification-results:
     runs-on: ubuntu-latest
-    needs: run-simple-suite 
+    needs: run-simple-suite
     if: always()
     steps:
       - name: Post a result message in a Slack channel
-        env: 
+        env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           if [ "${{ needs.run-simple-suite.result }}" == "success" ]; then
@@ -61,7 +61,7 @@ jobs:
           elif [ "${{ needs.run-simple-suite.result }}" == "failure" ]; then
             MESSAGE="The simple suite pipeline failed"
           fi
-          
+
           curl -X POST -H 'Content-type: application/json' \
           --data "{\"text\":\"$MESSAGE\"}" \
           $SLACK_WEBHOOK_URL
