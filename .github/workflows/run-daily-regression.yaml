@@ -1,0 +1,44 @@
+name: Daily run of P0 tests
+
+on:
+  schedule:
+    - cron: '0 8 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  run-daily-p0-tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [chromium, firefox, webkit, mobile-chrome, mobile-safari]
+      fail-fast: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js and Playwright
+        uses: ./.github/actions/setup-playwright
+
+      - name: List tests to run
+        id: list-tests
+        run: |
+          TEST_LIST=$(yarn playwright test --project=${{ matrix.project }} --grep @regression --list || echo '')
+          echo "has_tests=$([ -n "$TEST_LIST" ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+
+      - name: Run tests
+        if: ${{ steps.list-tests.outputs.has_tests == 'true' }}
+        run: yarn playwright test --project=${{ matrix.project }} --grep @regression
+
+      - name: Set date variable
+        if: ${{ !cancelled() }}
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-tests-results-${{ steps.date.outputs.date }}-${{ matrix.project }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: playwright-report/
+          retention-days: 30
