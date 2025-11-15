@@ -1,0 +1,93 @@
+name: Run changed or added tests
+
+on:
+    workflow_call:
+      inputs:
+        base_ref:
+          description: 'Base branch to compare against'
+          required: false
+          default: 'main'
+          type: string
+    workflow_dispatch:
+      inputs:
+        base_ref:
+          description: 'Base branch to compare against'
+          required: false
+          default: 'main'
+          type: string
+
+jobs:
+  run-changed-or-added-tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [chromium, firefox, webkit, mobile-chrome, mobile-safari]
+      fail-fast: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+            
+      - name: Set up Node.js and Playwright
+        uses: ./.github/actions/setup-playwright
+
+      - name: Find new or changed tests
+        id: find-new-tests
+        run: |
+          BASE_REF="${{ inputs.base_ref || 'main' }}"
+          git fetch origin "$BASE_REF"
+          NEW_TESTS=$(git diff --name-only --diff-filter=ACMR "$BASE_REF"...HEAD -- tests/ || echo '')
+          
+          if [ -z "$NEW_TESTS" ]; then
+            echo "No new or changed tests found"
+            echo "has_new_tests=false" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            echo "New tests found: $NEW_TESTS"
+            echo "has_new_tests=true" >> $GITHUB_OUTPUT
+
+            {
+                echo 'new_test_files<<EOF'
+                echo "$NEW_TESTS"
+                echo 'EOF'
+            } >> $GITHUB_OUTPUT
+          fi
+
+      - name: List new tests to run
+        if: ${{ steps.find-new-tests.outputs.has_new_tests == 'true' }}
+        id: list-tests
+        run: |
+          TEST_FILES=$(echo "${{ steps.find-new-tests.outputs.new_test_files }}" | tr '\n' ' ')
+          
+          if [ -z "$TEST_FILES" ]; then
+            echo "No test files to process"
+            echo "has_new_tests=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          TEST_LIST=$(yarn playwright test --project=${{ matrix.project }} "$TEST_FILES" --list || echo '')
+          
+          if [ -z "$TEST_LIST" ]; then
+            echo "No tests found for project ${{ matrix.project }}"
+            echo "has_new_tests=false" >> $GITHUB_OUTPUT
+          else
+            echo "Tests found for project ${{ matrix.project }}:"
+            echo "$TEST_LIST"
+            echo "has_new_tests=true" >> $GITHUB_OUTPUT
+            echo "test_files=$TEST_FILES" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run tests
+        if: ${{ steps.list-tests.outputs.has_new_tests == 'true' }}
+        run: |
+          yarn playwright test --project=${{ matrix.project }} "${{ steps.list-tests.outputs.test_files }}"
+
+      - name: Upload test results
+        if: ${{ steps.list-tests.outputs.has_new_tests == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: new-tests-results-${{ matrix.project }}-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 7
