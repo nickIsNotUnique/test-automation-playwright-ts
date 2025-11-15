@@ -1,0 +1,19 @@
+name: Check if code can be compiled
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  run-compile-check:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up project
+        uses: ./.github/actions/setup-project
+
+      - name: Run compile check
+        run: yarn tsc --noEmit
