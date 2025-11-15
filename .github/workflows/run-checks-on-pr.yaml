@@ -1,0 +1,24 @@
+name: Run checks on PR
+
+on:
+  pull_request: 
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run-compile-check:
+    uses: ./.github/workflows/run-compile-check.yaml
+
+  run-eslint-check:
+    uses: ./.github/workflows/run-eslint-check.yaml
+
+  run-prettier-check:
+    uses: ./.github/workflows/run-prettier-check.yaml
+
+  run-changed-or-added-tests:
+    uses: ./.github/workflows/run-new-tests-check.yaml
+    with:
+      base_ref: ${{ github.base_ref }}
