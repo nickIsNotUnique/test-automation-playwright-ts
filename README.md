@@ -7,6 +7,7 @@ This repository serves as a **practical demonstration** of implementing Playwrig
 ## Overview
 
 This repository demonstrates a pragmatic setup for automated UI tests using Playwright and TypeScript. It is intended as a foundation you can adapt to your own product tests. Key goals:
+
 - Fast, reliable E2E tests using Playwright Test
 - TypeScript-first developer experience
 - Recommended CI integration and reproducible local runs
@@ -34,12 +35,14 @@ This repository demonstrates a pragmatic setup for automated UI tests using Play
 ## Quick start
 
 1. Clone the repository
+
    ```bash
    git clone https://github.com/nickIsNotUnique/test-automation-playwright-ts.git
    cd test-automation-playwright-ts
    ```
 
 2. Install dependencies and Playwright browsers
+
    ```bash
    yarn install
    yarn playwright install
@@ -70,6 +73,7 @@ This repository demonstrates a pragmatic setup for automated UI tests using Play
   ```bash
   yarn playwright show-report
   ```
+
 ---
 
 ## Project structure
@@ -91,20 +95,24 @@ This section describes the project layout
 
 ## CI: GitHub Actions
 
-This project uses GitHub Actions for continuous integration. 
+This project uses GitHub Actions for continuous integration.
 Available pipelines:
 
 ### `playwright.yml` - Playwright Tests
+
 #### Summary:
+
 - Runs on every push to main/master
 - Executes complete test coverage
 - Ideal for: Release validation, nightly builds
 
 **Triggers:**
+
 - Push to `main` or `master` branches
 - Pull Request to `main` or `master` branches
 
 **Functions:**
+
 - Checks out code from repository
 - Sets up Node.js (latest LTS version)
 - Installs dependencies via Yarn
@@ -113,6 +121,7 @@ Available pipelines:
 - Uploads test results as artifacts
 
 **Results:**
+
 - **Report**: Playwright HTML report saved as artifact named `playwright-report`
 - **Retention**: artifacts stored for 30 days
 - **Timeout**: maximum execution time - 60 minutes
@@ -122,13 +131,16 @@ Available pipelines:
 ---
 
 ### `auto-simple-suite.yaml` - Auto run simple suite
+
 #### Summary:
+
 - Triggers on PRs to main
 - Runs critical path tests only
 - Includes Slack notifications
 - Ideal for: PR validation, quick feedback loops
 
 **Triggers:**
+
 - Pull Request to `main` branch
 - Manual run via workflow_dispatch
 
@@ -136,6 +148,7 @@ Available pipelines:
 This workflow consists of **3 jobs**:
 
 #### Job 1: `run-simple-suite`
+
 - Checks out code
 - Sets up Node.js version 22 with Yarn caching
 - Installs dependencies
@@ -144,11 +157,13 @@ This workflow consists of **3 jobs**:
 - Uploads test results
 
 #### Job 2: `post-slack-notification-started`
+
 - Sends Slack notification about **test execution start**
 - Message: "The simple suite pipeline started"
 - Uses webhook from `SLACK_WEBHOOK_URL` secret
 
 #### Job 3: `post-slack-notification-results`
+
 - Depends on `run-simple-suite` completion
 - Always runs (if: always())
 - Sends Slack notification with **execution result**:
@@ -156,6 +171,7 @@ This workflow consists of **3 jobs**:
   - On failure: "The simple suite pipeline failed"
 
 **Results:**
+
 - **Report**: test results saved as `simple-suite-results-{run_id}`
 - **Retention**: artifacts stored for 7 days
 - **Timeout**: maximum execution time - 15 minutes
@@ -166,15 +182,19 @@ This workflow consists of **3 jobs**:
 ---
 
 ### `run-simple-suite.yaml` - Run simple suite
+
 #### Summary:
+
 - Manually triggered via GitHub UI
 - No notifications (focused testing)
 - Ideal for: Ad-hoc testing, debugging, demos
 
 **Triggers:**
+
 - Manual run only via workflow_dispatch
 
 **Functions:**
+
 - Identical to `run-simple-suite` job from the auto-simple-suite workflow
 - Checks out code
 - Sets up Node.js version 22 with Yarn caching
@@ -184,6 +204,7 @@ This workflow consists of **3 jobs**:
 - Uploads test results
 
 **Results:**
+
 - **Report**: test results saved as `simple-suite-results-{run_id}`
 - **Retention**: artifacts stored for 7 days
 - **Timeout**: maximum execution time - 15 minutes
@@ -205,6 +226,7 @@ This project is part of my article series "Playwright testing with GitHub Action
 ## Feedback & Contributions
 
 Questions or suggestions? Feel free to:
+
 - [Open an issue](https://github.com/nickIsNotUnique/test-automation-playwright-ts/issues)
 - [Start a discussion](https://github.com/nickIsNotUnique/test-automation-playwright-ts/discussions)
 - ⭐ Star this repo if you find it useful!
