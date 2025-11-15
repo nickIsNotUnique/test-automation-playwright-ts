@@ -38,7 +38,7 @@ jobs:
         run: |
           BASE_REF="${{ inputs.base_ref || 'main' }}"
           git fetch origin "$BASE_REF"
-          NEW_TESTS=$(git diff --name-only --diff-filter=ACMR "$BASE_REF"...HEAD -- tests/ || echo '')
+          NEW_TESTS=$(git diff --name-only --diff-filter=ACMR origin/"$BASE_REF"...HEAD -- tests/ || echo '')
 
           if [ -z "$NEW_TESTS" ]; then
             echo "No new or changed tests found"
