@@ -37,27 +37,32 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      grep: /@desktop/,
     },
 
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
+      grep: /@desktop/,
     },
 
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+      grep: /@desktop/,
     },
 
     /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 5'] },
+      grep: /@mobile/,
+    },
+    {
+      name: 'mobile-safari',
+      use: { ...devices['iPhone 12'] },
+      grep: /@mobile/,
+    },
 
     /* Test against branded browsers. */
     // {
