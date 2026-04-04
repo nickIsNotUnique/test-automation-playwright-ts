@@ -25,10 +25,12 @@ This repository demonstrates a pragmatic setup for automated UI tests using Play
 
 ## Prerequisites
 
-- Node.js (~22.20.0)
+- Node.js (≥ 22.20.0; the repo includes [`.nvmrc`](.nvmrc) — run `nvm use` if you use nvm)
 - TypeScript (~5.9.2)
 - yarn (~1.22.22)
-- Playwright (~1.55.0)
+- Playwright (~1.59.x)
+
+On macOS below 15, WebKit-powered projects (`webkit`, `mobile-safari`) are skipped locally in [`playwright.config.ts`](playwright.config.ts); they still run on Linux CI. Set `PLAYWRIGHT_SKIP_WEBKIT=1` to force skipping WebKit on any host.
 
 ---
 
