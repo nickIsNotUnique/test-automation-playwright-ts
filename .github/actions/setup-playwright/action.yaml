@@ -10,6 +10,10 @@ runs:
         node-version: '22.20'
         cache: 'yarn'
 
+    - name: Enable Corepack
+      run: corepack enable
+      shell: bash
+
     - name: Install dependencies
       run: yarn install
       shell: bash
