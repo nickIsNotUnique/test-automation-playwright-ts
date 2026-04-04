@@ -1,4 +1,19 @@
+import { execSync } from 'node:child_process';
+
 import { defineConfig, devices } from '@playwright/test';
+
+function hostSupportsPlaywrightWebKit(): boolean {
+  if (process.env.PLAYWRIGHT_SKIP_WEBKIT === '1') return false;
+  if (process.platform !== 'darwin') return true;
+  try {
+    const version = execSync('sw_vers -productVersion', { encoding: 'utf8' }).trim();
+    const major = parseInt(version.split('.')[0] ?? '0', 10);
+    // WebKit is not bundled for older macOS (e.g. 13–14) in recent Playwright; Linux CI is unaffected.
+    return major >= 15;
+  } catch {
+    return true;
+  }
+}
 
 /**
  * Read environment variables from file.
@@ -46,11 +61,15 @@ export default defineConfig({
       grep: /@desktop/,
     },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-      grep: /@desktop/,
-    },
+    ...(hostSupportsPlaywrightWebKit()
+      ? [
+          {
+            name: 'webkit',
+            use: { ...devices['Desktop Safari'] },
+            grep: /@desktop/,
+          },
+        ]
+      : []),
 
     /* Test against mobile viewports. */
     {
@@ -58,11 +77,15 @@ export default defineConfig({
       use: { ...devices['Pixel 5'] },
       grep: /@mobile/,
     },
-    {
-      name: 'mobile-safari',
-      use: { ...devices['iPhone 12'] },
-      grep: /@mobile/,
-    },
+    ...(hostSupportsPlaywrightWebKit()
+      ? [
+          {
+            name: 'mobile-safari',
+            use: { ...devices['iPhone 12'] },
+            grep: /@mobile/,
+          },
+        ]
+      : []),
 
     /* Test against branded browsers. */
     // {
