@@ -26,8 +26,8 @@ This repository demonstrates a pragmatic setup for automated UI tests using Play
 ## Prerequisites
 
 - Node.js (≥ 22.20.0; the repo includes [`.nvmrc`](.nvmrc) — run `nvm use` if you use nvm)
+- [Corepack](https://nodejs.org/api/corepack.html) (bundled with Node): run `corepack enable` once on your machine so the Yarn version from `packageManager` in [`package.json`](package.json) is used (Yarn 4.x)
 - TypeScript (~5.9.2)
-- yarn (~1.22.22)
 - Playwright (~1.59.x)
 
 On macOS below 15, WebKit-powered projects (`webkit`, `mobile-safari`) are skipped locally in [`playwright.config.ts`](playwright.config.ts); they still run on Linux CI. Set `PLAYWRIGHT_SKIP_WEBKIT=1` to force skipping WebKit on any host.
@@ -43,9 +43,10 @@ On macOS below 15, WebKit-powered projects (`webkit`, `mobile-safari`) are skipp
    cd test-automation-playwright-ts
    ```
 
-2. Install dependencies and Playwright browsers
+2. Enable Corepack (once per machine), then install dependencies and Playwright browsers
 
    ```bash
+   corepack enable
    yarn install
    yarn playwright install
    ```
@@ -86,6 +87,7 @@ This section describes the project layout
 ├── .github/workflows/ # CI/CD workflows
 ├── tests/ # Test files (*.spec.ts)
 ├── .gitignore
+├── .yarnrc.yml        # Yarn 4 config (e.g. node-modules linker)
 ├── package.json
 ├── playwright.config.ts
 ├── README.md
