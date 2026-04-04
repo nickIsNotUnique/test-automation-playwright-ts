@@ -4,7 +4,7 @@
   "repository": "git@github.com:nickisnotunique/test-automation-playwright-ts.git",
   "author": "Daria Domina <nickisnotunique@gmail.com>",
   "devDependencies": {
-    "@playwright/test": "~1.55.0",
+    "@playwright/test": "^1.59.0",
     "@types/node": "~22",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
